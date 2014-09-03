@@ -5,12 +5,10 @@ CPPFLAGS += -MD
 DEPDIR    = .dep
 
 CC = g++
-CXXFLAGS = -std=c++11 -Wall $(shell pkg-config --cflags hdf5)
+CXXFLAGS = -std=c++11 -Wall
 
-# The pkg-config program emits the name of the underlying HDF5 C library, but I
-# don't know how to get pkg-config to emit the library needed for C++.  So I
-# have explicitly written it in at the beginning of LDLIBS.
-LDLIBS = -lhdf5_cpp $(shell pkg-config --libs hdf5)
+# So far, nothing to link against.
+LDLIBS =
 
 PROGRAM = ulam
 
