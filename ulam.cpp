@@ -33,9 +33,9 @@ int main(int argc, char** argv)
 {
    CommandLine cmdLine(argc, argv);
    unsigned const size = cmdLine.size;
-   cout << "calculating prime factorization for first " << size* size
+   cout << "calculating prime factorization for first " << (size * size)
         << " naturals..." << flush;
-   Natural::init(size*size);
+   Natural::init(size * size);
    cout << " done!" << endl;
    /// TBS: Code that does something useful.
    return 0;
