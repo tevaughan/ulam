@@ -25,19 +25,20 @@ void CommandLine::usage()
 {
    cerr << "\nusage:  " << invoc
         << " [-b <beg>] [-c] [-d | -l | -u] -s <size>\n\n"
-        << "Draw an Ulam spiral.\n\n"
-        << "By default, start with the beginning value 1 at the center, \n"
-        << "move first to the right, and draw counter-clockwise.\n\n"
-        << "The size is a REQUIRED option.\n"
-        << "If specified, <beg> must be a POSITIVE INTEGER.\n"
-        << "Only ONE of the directions may be specified.\n"
-        << "The <size> parameter must be a POSITIVE INTEGER.\n\n"
+        << "Draw an Ulam spiral into a PPM image that is sent to the\n"
+        << "standard output.\n\n"
         << "-b <beg>   Start with value <beg> at center.\n"
         << "-c         Draw clockwise.\n"
         << "-d         Move first downward.\n"
         << "-l         Move first to the left.\n"
         << "-u         Move first upward.\n"
-        << "-s <size>  Draw spiral of width <size> cells.\n" << endl;
+        << "-s <size>  Draw spiral of width <size> cells.\n\n"
+        << "By default, start with the beginning value 1 at the center, draw\n"
+        << "counter-clockwise, and move first to the right.\n\n"
+        << "If specified, <beg> must be a POSITIVE INTEGER.\n"
+        << "Only ONE of the directions may be specified.\n"
+        << "<size> MUST be specified and must be a POSITIVE INTEGER.\n"
+        << endl;
    exit(-1);
 }
 
