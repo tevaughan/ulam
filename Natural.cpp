@@ -94,9 +94,9 @@ public:
    {
    }
 
-   unsigned base() const { return mBase; }  /// \return  Base value.
-   unsigned mult() const { return mMult; }  /// \return  Multiple (base*fact).
-   unsigned fact() const { return mFact; }  /// \return  Factor.
+   unsigned base() const { return mBase; }  ///< \return  Base value.
+   unsigned mult() const { return mMult; }  ///< \return  Multiple (base*fact).
+   unsigned fact() const { return mFact; }  ///< \return  Factor.
 
    /// Set factor.
    /// \param ff  New value for factor.
@@ -134,7 +134,7 @@ void Natural::init(unsigned max)
          }
       }
       if (factors.size() == 0) {
-         cerr << "\nNatural::init: ERROR: no factors for " << current << endl;
+         cerr << "Natural::init: ERROR: no factors for " << current << endl;
          exit(1);
       }
    }
