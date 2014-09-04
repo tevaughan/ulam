@@ -16,24 +16,22 @@
 // You should have received a copy of the GNU General Public License along with
 // Ulam.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>  // for cout
+#ifndef ULAM_SPIRAL_HPP
+#define ULAM_SPIRAL_HPP
 
-#include "CommandLine.hpp"
-#include "UlamSpiral.hpp"
+#include "Image.hpp"
+#include "UlamConfig.hpp"
 
-using namespace std;
-
-/// Draw an Ulam spiral, and write it out to a PPM file.
-///
-/// \param argc  Number of arguments (including invokation name) on command
-///              line.
-///
-/// \param argv  Array of strings, each representing a command-line option.
-int main(int argc, char** argv)
+/// Image of an Ulam Spiral.
+class UlamSpiral
 {
-   CommandLine const cmdLine(argc, argv);
-   UlamSpiral const ulamSpiral(cmdLine.ulamConfig);
-   /// TBS: Code that does something useful.
-   return 0;
-}
+   UlamConfig mConfig;  ///< Configuration for spiral.
+   Image mImage;        ///< Image of spiral.
+
+public:
+   /// Draw spiral into memory buffer.
+   UlamSpiral(UlamConfig const& config);
+};
+
+#endif  // ndef ULAM_SPIRAL_HPP
 

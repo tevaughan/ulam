@@ -18,22 +18,18 @@
 
 #include <iostream>  // for cout
 
-#include "CommandLine.hpp"
+#include "Natural.hpp"
 #include "UlamSpiral.hpp"
 
 using namespace std;
 
-/// Draw an Ulam spiral, and write it out to a PPM file.
-///
-/// \param argc  Number of arguments (including invokation name) on command
-///              line.
-///
-/// \param argv  Array of strings, each representing a command-line option.
-int main(int argc, char** argv)
+UlamSpiral::UlamSpiral(UlamConfig const& config)
+   : mConfig(config), mImage(config.size, config.size)
 {
-   CommandLine const cmdLine(argc, argv);
-   UlamSpiral const ulamSpiral(cmdLine.ulamConfig);
-   /// TBS: Code that does something useful.
-   return 0;
+   unsigned const size = mConfig.size;
+   cout << "calculating prime factorization for first " << (size * size)
+        << " naturals..." << flush;
+   Natural::init(size * size);
+   cout << " done!" << endl;
 }
 

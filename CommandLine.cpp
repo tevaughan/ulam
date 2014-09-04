@@ -43,50 +43,51 @@ void CommandLine::usage()
 }
 
 CommandLine::CommandLine(int argc, char** argv)
-   : invoc(argv[0]), begin(1), size(0), clockWise(false), initDir(RIGHT)
+   : invoc(argv[0]), ulamConfig(0)
 {
    int opt;
+   UlamConfig::InitDir& initDir = ulamConfig.initDir;
    while ((opt = getopt(argc, argv, "b:cdls:u")) != -1) {
       switch (opt) {
       case 'b':
-         convert(begin);
-         if (begin < 1) usage();
+         convert(ulamConfig.begin);
+         if (ulamConfig.begin < 1) usage();
          break;
       case 'c':
-         clockWise = true;
+         ulamConfig.clockWise = true;
          break;
       case 'd':
-         if (initDir != RIGHT && initDir != DOWN) {
+         if (initDir != UlamConfig::RIGHT && initDir != UlamConfig::DOWN) {
             cerr << "\nCommandLine::CommandLine: ERROR: more than one "
                     "initial direction specified" << endl;
             usage();
          }
-         initDir = DOWN;
+         initDir = UlamConfig::DOWN;
          break;
       case 'l':
-         if (initDir != RIGHT && initDir != LEFT) {
+         if (initDir != UlamConfig::RIGHT && initDir != UlamConfig::LEFT) {
             cerr << "\nCommandLine::CommandLine: ERROR: more than one "
                     "initial direction specified" << endl;
             usage();
          }
-         initDir = LEFT;
+         initDir = UlamConfig::LEFT;
          break;
       case 'u':
-         if (initDir != RIGHT && initDir != UP) {
+         if (initDir != UlamConfig::RIGHT && initDir != UlamConfig::UP) {
             cerr << "\nCommandLine::CommandLine: ERROR: more than one "
                     "initial direction specified" << endl;
             usage();
          }
-         initDir = UP;
+         initDir = UlamConfig::UP;
          break;
       case 's':
-         convert(size);
-         if (size < 1) usage();
+         convert(ulamConfig.size);
+         if (ulamConfig.size < 1) usage();
          break;
       default:
          usage();
       }
    }
-   if (size == 0) usage();
+   if (ulamConfig.size == 0) usage();
 }
 

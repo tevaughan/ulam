@@ -23,17 +23,14 @@
 #include <sstream>   // for istringstream
 #include <unistd.h>  // for optarg, getopt()
 
+#include "UlamConfig.hpp"
+
 /// Representation of values specified, explicitly or implicitly, on the
 /// command line.
 struct CommandLine
 {
-   char* invoc;     ///< Name of program as invoked on command line.
-   int begin;       ///< Starting value at center of spiral.
-   int size;        ///< Width of final image in pixels.
-   bool clockWise;  ///< Flag set true only if spiral wrap clockwise.
-
-   /// Initial direction away from center along spiral.
-   enum InitDir { RIGHT, UP, LEFT, DOWN } initDir;
+   char* invoc;            ///< Name of program as invoked on command line.
+   UlamConfig ulamConfig;  ///< Configuration for Ulam spiral.
 
    /// Print out how to invoke the program, and exit with an indication of
    /// error to the operating system.

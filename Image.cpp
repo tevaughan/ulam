@@ -16,24 +16,19 @@
 // You should have received a copy of the GNU General Public License along with
 // Ulam.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>  // for cout
+#include <cstdlib>   // for exit()
+#include <iostream>  // for cerr
 
-#include "CommandLine.hpp"
-#include "UlamSpiral.hpp"
+#include "Image.hpp"
 
 using namespace std;
 
-/// Draw an Ulam spiral, and write it out to a PPM file.
-///
-/// \param argc  Number of arguments (including invokation name) on command
-///              line.
-///
-/// \param argv  Array of strings, each representing a command-line option.
-int main(int argc, char** argv)
+Image::Image(unsigned ww, unsigned hh)
+   : mData(new Pixel[ww * hh]), mWidth(ww), mHeight(hh)
 {
-   CommandLine const cmdLine(argc, argv);
-   UlamSpiral const ulamSpiral(cmdLine.ulamConfig);
-   /// TBS: Code that does something useful.
-   return 0;
+   if (!mData) {
+      cerr << "Image::Image: ERROR allocating memory for image" << endl;
+      exit(-1);
+   }
 }
 
