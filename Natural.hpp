@@ -68,8 +68,11 @@ public:
    /// \return    Product as a Natural number.
    friend Natural operator*(Natural const& n1, Natural const& n2);
 
-   /// Initialize the prime factorizations up to a limit. Use a modified
-   /// version of the Sieve of Eratosthenes.
+   /// Initialize the prime factorizations up to a limit. For this purpose, I
+   /// have implemented my own, customized version of the Sieve of
+   /// Eratosthenes. It not only efficiently finds all of the primes up to the
+   /// limit but also efficiently constructs the prime factorization for every
+   /// number up to the limit.
    ///
    /// \param max  The largest natural number with initialized factorization.
    static void init(unsigned max);
