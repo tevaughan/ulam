@@ -5,7 +5,7 @@ CPPFLAGS += -MD
 DEPDIR    = .dep
 
 CC = g++
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++11 -Wall -O2
 
 # So far, nothing to link against.
 LDLIBS =
