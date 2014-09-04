@@ -28,7 +28,7 @@
 class Natural
 {
 public:
-   /// Type of prime factorization. At least when used by class Natural, each
+   /// Type for prime factorization. At least when used by class Natural, each
    /// element in the vector is a prime number in the prime factorization of a
    /// natural number, and the list of primes is sorted, though there may be
    /// repeated values of the same prime as necessary for the factorization.
