@@ -46,8 +46,13 @@ limit but also efficiently constructs the prime factorization of every natural
 number up to the limit.
 
 The complete prime factorization of every number on the spiral might in
-principle be useful for coloring the plot in interesting ways. At the moment, a
-basic, two-component coloring scheme is implemented and described below.
+principle be useful for coloring the plot in interesting ways. The
+factorization includes not only the list of primes in the factorization (which
+is fairly easy to get out of the standard sieve) but also the power of each
+prime in the factorization.
+
+At the moment, a basic, two-component coloring scheme is implemented and
+described below.
 
 Example Output
 --------------
