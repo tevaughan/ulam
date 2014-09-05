@@ -64,34 +64,14 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
    : mConfig(config), mImage(config.size, config.size)
 {
    unsigned const size = mConfig.size;
-   cerr << "calculating prime factorization for first " << (size * size)
+   unsigned const numNats = size * size + mConfig.begin - 1;
+   cerr << "calculating prime factorization for first " << numNats
         << " naturals..." << flush;
-   Natural::init(size * size);
+   Natural::init(numNats);
    cerr << " done!" << endl;
-#if 0
-   for (unsigned ii = 1; ii <= size * size; ++ii ) {
-      printf("%10u ", ii);
-      Factors const& ff = Natural(ii).factors();
-      if (ff.size() == 1) {
-         printf("prime\n");
-      } else if (ff.size() > 1) {
-         printf("= ");
-         for (unsigned jj = 0; jj < ff.size(); ++jj) {
-            if (jj > 0) printf("*");
-            printf("%u", ff[jj]);
-         }
-         printf("\n");
-      } else if(ii > 1) {
-         cerr << "UlamSpiral::UlamSpiral: ERROR: no factors" << endl;
-         exit(-1);
-      } else {
-         printf("\n");
-      }
-   }
-#endif
-   unsigned num = 1;  // eventually mConfig.begin()
+   unsigned num = mConfig.begin;
    int xx, yy;
-   convert(num, xx, yy);
+   convert(num - mConfig.begin + 1, xx, yy);
    unsigned col = size / 2 + xx;
    unsigned row = size / 2 + yy;
    while (col < size && row < size) {
@@ -124,7 +104,7 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
       }
       // Advance to next number, and convert it to column and row coordinates.
       ++num;
-      convert(num, xx, yy);
+      convert(num - mConfig.begin + 1, xx, yy);
       col = size / 2 + xx;
       row = size / 2 + yy;
    }
