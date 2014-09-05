@@ -89,7 +89,7 @@ void Image::writeAscii(int chan) const
    int off = -1;
    for (unsigned row = 0; row < mHeight; ++row) {
       for (unsigned col = 0; col < mWidth; ++col) {
-         cout << char(unsigned(mData[++off].c[chan] + 0.5) & 0xFF);
+         cout << " " << char(unsigned(mData[++off].c[chan] + 0.5) & 0xFF);
       }
       cout << "\n";
    }

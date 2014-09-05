@@ -101,7 +101,7 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
       float sum = 0.0f;  // Initialize sum of factors.
       switch (mConfig.outputType) {
       case UlamConfig::ASCII:
-         pixel.r(nfac == 1 ? '*' : '.');
+         pixel.r(nfac == 1 ? '@' : '-');
          break;
       case UlamConfig::PPM:
          switch (nfac) {
