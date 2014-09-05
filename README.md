@@ -45,6 +45,10 @@ Sieve of Eratosthenes. It not only efficiently finds all of the primes up to a
 limit but also efficiently constructs the prime factorization of every natural
 number up to the limit.
 
+The complete prime factorization of every number on the spiral might in
+principle be useful for coloring the plot in interesting ways. At the moment, a
+basic, two-component coloring scheme is implemented and described below.
+
 Example Output
 --------------
 
