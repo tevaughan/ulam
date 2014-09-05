@@ -24,7 +24,7 @@
 
 using namespace std;
 
-vector< Natural::Factors > Natural::mFactors;
+vector< Factors > Natural::mFactors;
 
 Natural::Natural(unsigned nn) : mOffset(nn - 1)
 {
@@ -36,63 +36,6 @@ Natural::Natural(unsigned nn) : mOffset(nn - 1)
       cerr << "Natural::Natural: " << nn << " not initialized" << endl;
       exit(-1);
    }
-}
-
-Natural operator*(Natural const& n1, Natural const& n2)
-{
-   unsigned const n3 = unsigned(n1) * unsigned(n2);
-   if (n3 > Natural::mFactors.size()) {
-      cerr << "op*(Natural,Natural): product larger than initialized range"
-           << endl;
-      exit(-1);
-   }
-   typedef Natural::Factors Factors;
-   Factors& f3 = Natural::mFactors[n3 - 1];
-   if (n3 > 1 && f3.size() == 0) {
-      // Initialize new natural as product of existing naturals.
-      Factors const& f1 = n1.factors();
-      Factors const& f2 = n2.factors();
-      unsigned off1 = 0;  // offset into list of prime factors
-      unsigned off2 = 0;  // offset into list of prime factors.
-      bool done = false;
-      // Combine prime factors into new list; preserve sorting.
-      while (!done) {
-         int cc = 0;  // case number
-         unsigned p1, p2;
-         if (off1 < f1.size()) {
-            cc += 1;
-            p1 = f1[off1];
-         }
-         if (off2 < f2.size()) {
-            cc += 2;
-            p2 = f2[off2];
-         }
-         // Push at most one more prime factor onto new list.
-         switch (cc) {
-         case 0:
-            done = true;  // no more prime factors in either list
-            break;
-         case 1:
-            f3.push_back(p1);
-            ++off1;
-            break;
-         case 2:
-            f3.push_back(p2);
-            ++off2;
-            break;
-         case 3:
-            // When a factor from each list be available, push the smaller.
-            if (p1 < p2) {
-               f3.push_back(p1);
-               ++off1;
-            } else {
-               f3.push_back(p2);
-               ++off2;
-            }
-         }
-      }
-   }
-   return n3;
 }
 
 /// Unsigned multiple of an unsigned base value. The base is fixed at
@@ -147,7 +90,11 @@ void Natural::init(unsigned max)
          Multiple& prime = primes[ii];
          if (prime.mult() <= current && prime.mult() + prime.base() <= max) {
             prime.incFact();
-            Natural(prime.base()) * Natural(prime.fact());
+            unsigned const base = prime.base();
+            unsigned const fact = prime.fact();
+            Factors const& fA = Natural(base).factors();
+            Factors const& fB = Natural(fact).factors();
+            mFactors[base * fact - 1] = fA * fB;
          }
       }
       if (factors.size() == 0) {
