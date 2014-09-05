@@ -23,6 +23,20 @@ An application to render the
     If specified, <beg> must be a POSITIVE INTEGER.
     <size> MUST be specified and must be a POSITIVE INTEGER.
 
+Installation
+------------
+
+In order to build 'ulam', one needs to have the following installed in a
+unix-like system (such as GNU/Linux or Cygwin):
+ * make
+ * g++
+ * convert (part of the ImageMagick toolset)
+ * exuberant-ctags
+
+After one uses git to clone this project (or otherwise downloads the files into
+a directory called 'ulam'), one may simply change to the 'ulam' directory and
+type 'make'.
+
 Sieve of Eratosthenes
 ---------------------
 
