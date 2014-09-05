@@ -23,20 +23,18 @@ using namespace std;
 
 void CommandLine::usage()
 {
-   cerr << "\nusage:  " << invoc
-        << " [-b <beg>] [-c] [-d | -l | -u] -s <size>\n\n"
-        << "Draw an Ulam spiral into a PPM image that is sent to the\n"
-        << "standard output.\n\n"
+   cerr << "\nusage:  " << invoc << " [-b <beg>] [-a | -p] -s <size>\n\n"
+        << "Draw an Ulam spiral into an image that is sent to the standard\n"
+        << "output.\n\n"
         << "-b <beg>   Start with value <beg> at center.\n"
-        << "-c         Draw clockwise.\n"
-        << "-d         Move first downward.\n"
-        << "-l         Move first to the left.\n"
-        << "-u         Move first upward.\n"
-        << "-s <size>  Draw spiral of width <size> cells.\n\n"
-        << "By default, start with the beginning value 1 at the center, draw\n"
-        << "counter-clockwise, and move first to the right.\n\n"
+        << "-a         Output an ASCII plot.\n"
+        << "-p         Output a PPM image.\n"
+        << "-s <size>  Draw spiral in a square of width <size> cells.\n\n"
+        << "By default, start with the beginning value 1 at the center, and\n"
+        << "decide on the basis of <size> what output format to use. Without\n"
+        << "specification of '-a' or '-p', output as an ASCII plot for\n"
+        << "<size> smaller than 24; otherwise output a PPM image.\n\n"
         << "If specified, <beg> must be a POSITIVE INTEGER.\n"
-        << "Only ONE of the directions may be specified.\n"
         << "<size> MUST be specified and must be a POSITIVE INTEGER.\n"
         << endl;
    exit(-1);
@@ -46,39 +44,28 @@ CommandLine::CommandLine(int argc, char** argv)
    : invoc(argv[0]), ulamConfig(0)
 {
    int opt;
-   UlamConfig::Dir& initDir = ulamConfig.initDir;
-   while ((opt = getopt(argc, argv, "b:cdls:u")) != -1) {
+   UlamConfig::OutputType& type = ulamConfig.outputType;
+   while ((opt = getopt(argc, argv, "b:aps:")) != -1) {
       switch (opt) {
       case 'b':
          convert(ulamConfig.begin);
          if (ulamConfig.begin < 1) usage();
          break;
-      case 'c':
-         ulamConfig.clockWise = true;
-         break;
-      case 'd':
-         if (initDir != UlamConfig::RIGHT && initDir != UlamConfig::DOWN) {
-            cerr << "\nCommandLine::CommandLine: ERROR: more than one "
-                    "initial direction specified" << endl;
+      case 'a':
+         if (type == UlamConfig::PPM) {
+            cerr << "\nCommandLine::CommandLine: ERROR: both output types "
+                    "specified" << endl;
             usage();
          }
-         initDir = UlamConfig::DOWN;
+         type = UlamConfig::ASCII;
          break;
-      case 'l':
-         if (initDir != UlamConfig::RIGHT && initDir != UlamConfig::LEFT) {
-            cerr << "\nCommandLine::CommandLine: ERROR: more than one "
-                    "initial direction specified" << endl;
+      case 'p':
+         if (type == UlamConfig::ASCII) {
+            cerr << "\nCommandLine::CommandLine: ERROR: both output types "
+                    "specified" << endl;
             usage();
          }
-         initDir = UlamConfig::LEFT;
-         break;
-      case 'u':
-         if (initDir != UlamConfig::RIGHT && initDir != UlamConfig::UP) {
-            cerr << "\nCommandLine::CommandLine: ERROR: more than one "
-                    "initial direction specified" << endl;
-            usage();
-         }
-         initDir = UlamConfig::UP;
+         type = UlamConfig::PPM;
          break;
       case 's':
          convert(ulamConfig.size);
@@ -89,5 +76,8 @@ CommandLine::CommandLine(int argc, char** argv)
       }
    }
    if (ulamConfig.size == 0) usage();
+   if (type == UlamConfig::AUTO) {
+      type = (ulamConfig.size < 24 ? UlamConfig::ASCII : UlamConfig::PPM);
+   }
 }
 

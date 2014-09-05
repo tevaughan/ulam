@@ -22,7 +22,9 @@
 #include "Image.hpp"
 #include "UlamConfig.hpp"
 
-/// Image of an Ulam Spiral.
+/// Image of an Ulam Spiral. The image is stored in a color image. If
+/// 'config().outputType' be 'ASCII', then the image is stored only in the red
+/// channel and as an ASCII plot.
 class UlamSpiral
 {
    UlamConfig mConfig;  ///< Configuration for spiral.
@@ -30,7 +32,14 @@ class UlamSpiral
 
 public:
    /// Draw spiral into memory buffer.
+   /// \param config  Configuration for spiral.
    UlamSpiral(UlamConfig const& config);
+
+   /// \return  Configuration for spiral.
+   UlamConfig const& config() const { return mConfig; }
+
+   /// \return  Image of spiral.
+   Image& image() { return mImage; }
 };
 
 #endif  // ndef ULAM_SPIRAL_HPP

@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License along with
 // Ulam.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <cfloat>    // for FLT_MAX
 #include <cstdlib>   // for exit()
 #include <iostream>  // for cerr
 
@@ -35,13 +36,13 @@ Image::Image(unsigned ww, unsigned hh)
 void Image::normalize()
 {
    unsigned const numPix = mWidth * mHeight;
-   unsigned maxR = 0, maxG = 0, maxB = 0;
-   unsigned minR = 255, minG = 255, minB = 255;
+   float maxR = -FLT_MAX, maxG = -FLT_MAX, maxB = -FLT_MAX;
+   float minR = +FLT_MAX, minG = +FLT_MAX, minB = +FLT_MAX;
    for (unsigned ii = 0; ii < numPix; ++ii) {
       Pixel const& pixel = mData[ii];
-      unsigned const rr = pixel.r();
-      unsigned const gg = pixel.g();
-      unsigned const bb = pixel.b();
+      float const rr = pixel.r();
+      float const gg = pixel.g();
+      float const bb = pixel.b();
       if (rr > maxR) maxR = rr;
       if (gg > maxG) maxG = gg;
       if (bb > maxB) maxB = bb;
@@ -49,20 +50,20 @@ void Image::normalize()
       if (gg < minG) minG = gg;
       if (bb < minB) minB = bb;
    }
-   unsigned denR = maxR - minR;
-   unsigned denG = maxG - minG;
-   unsigned denB = maxB - minB;
-   if (denR == 0) denR = 1;
-   if (denG == 0) denG = 1;
-   if (denB == 0) denB = 1;
+   float denR = maxR - minR;
+   float denG = maxG - minG;
+   float denB = maxB - minB;
+   if (denR < FLT_MIN) denR = 1.0f;
+   if (denG < FLT_MIN) denG = 1.0f;
+   if (denB < FLT_MIN) denB = 1.0f;
    for (unsigned ii = 0; ii < numPix; ++ii) {
       Pixel& pixel = mData[ii];
-      unsigned const rr = pixel.r();
-      unsigned const gg = pixel.g();
-      unsigned const bb = pixel.b();
-      pixel.r(unsigned((rr - minR)*255.0/denR + 0.5) & 0xFF);
-      pixel.g(unsigned((gg - minG)*255.0/denG + 0.5) & 0xFF);
-      pixel.b(unsigned((bb - minB)*255.0/denB + 0.5) & 0xFF);
+      float const rr = pixel.r();
+      float const gg = pixel.g();
+      float const bb = pixel.b();
+      pixel.r((rr - minR)*255.0/denR);
+      pixel.g((gg - minG)*255.0/denG);
+      pixel.b((bb - minB)*255.0/denB);
    }
 }
 
@@ -73,9 +74,24 @@ void Image::writePpm()
    unsigned const numPix = mWidth * mHeight;
    for (unsigned ii = 0; ii < numPix; ++ii) {
       Pixel const& pixel = mData[ii];
-      cout.put(pixel.r());
-      cout.put(pixel.g());
-      cout.put(pixel.b());
+      cout.put(unsigned(pixel.r() + 0.5) & 0xFF);
+      cout.put(unsigned(pixel.g() + 0.5) & 0xFF);
+      cout.put(unsigned(pixel.b() + 0.5) & 0xFF);
+   }
+}
+
+void Image::writeAscii(int chan) const
+{
+   if (chan < 0 || chan > 2) {
+      cerr << "Image::writeAscii: ERROR: illegal Channel " << chan << endl;
+      exit(-1);
+   }
+   int off = -1;
+   for (unsigned row = 0; row < mHeight; ++row) {
+      for (unsigned col = 0; col < mWidth; ++col) {
+         cout << char(unsigned(mData[++off].c[chan] + 0.5) & 0xFF);
+      }
+      cout << "\n";
    }
 }
 

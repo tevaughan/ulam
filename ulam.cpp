@@ -32,8 +32,18 @@ using namespace std;
 int main(int argc, char** argv)
 {
    CommandLine const cmdLine(argc, argv);
-   UlamSpiral const ulamSpiral(cmdLine.ulamConfig);
-   /// TBS: Code that does something useful.
+   UlamSpiral ulamSpiral(cmdLine.ulamConfig);
+   switch (ulamSpiral.config().outputType) {
+   case UlamConfig::ASCII:
+      ulamSpiral.image().writeAscii(0);
+      break;
+   case UlamConfig::PPM:
+      ulamSpiral.image().writePpm();
+      break;
+   case UlamConfig::AUTO:
+      cerr << "main: ERROR: outputType=AUTO" << endl;
+      return -1;
+   }
    return 0;
 }
 

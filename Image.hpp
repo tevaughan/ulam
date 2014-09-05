@@ -22,36 +22,37 @@
 /// Color components of a pixel.
 struct Pixel
 {
-   unsigned char c[3];  ///< Red, green, and blue components.
+   float c[3];  ///< Red, green, and blue components.
 
    /// Initialize a single pixel.
    /// \param rr  Value of red component.
    /// \param gg  Value of green component.
    /// \param bb  Value of blue component.
-   Pixel(unsigned char rr = 0, unsigned char gg = 0, unsigned char bb = 0)
+   Pixel(float rr = 0, float gg = 0, float bb = 0)
    {
       c[0] = rr;
       c[1] = gg;
       c[2] = bb;
    }
 
-   unsigned char r() const { return c[0]; }  ///< \return  Red   component.
-   unsigned char g() const { return c[1]; }  ///< \return  Green component.
-   unsigned char b() const { return c[2]; }  ///< \return  Blue  component.
+   float r() const { return c[0]; }  ///< \return  Red   component.
+   float g() const { return c[1]; }  ///< \return  Green component.
+   float b() const { return c[2]; }  ///< \return  Blue  component.
 
    /// Set red component.
    /// \param rr  New value for red component.
-   void r(unsigned char rr) { c[0] = rr; }
+   void r(float rr) { c[0] = rr; }
 
    /// Set green component.
    /// \param gg  New value for green component.
-   void g(unsigned char rr) { c[1] = rr; }
+   void g(float rr) { c[1] = rr; }
 
    /// Set blue component.
    /// \param bb  New value for blue component.
-   void b(unsigned char rr) { c[2] = rr; }
+   void b(float rr) { c[2] = rr; }
 };
 
+/// Color image.
 class Image
 {
    Pixel* mData;                    ///< Storage for pixel data.
@@ -94,11 +95,19 @@ public:
       return mData[cc + (mHeight - 1 - rr)*mWidth];
    }
 
-   /// Scale each color component so that the minimum is 0, and the maximum is
-   /// 255.
+   /// Scale each color component so that the minimum for the component is 0,
+   /// and the maximum for the component is 255.
    void normalize();
 
    void writePpm();  ///< Write PPM file to standard output.
+
+   /// Write one of the color channels to standard output as an ASCII plot.
+   /// This should be called if terminal-printable characters were encoded into
+   /// the channel's data.
+   ///
+   /// \param channel  Color channel to print. Red is Channel 0; green,
+   ///                 Channel 1; and blue, Channel 2.
+   void writeAscii(int channel) const;
 };
 
 #endif  // ndef IMAGE_HPP

@@ -22,21 +22,24 @@
 /// Configuration for Ulam spiral.
 struct UlamConfig
 {
-   /// Options for direction along spiral.
-   enum Dir { RIGHT, UP, LEFT, DOWN };
-
    unsigned size;   ///< Width (pixels) of image containing spiral.
    unsigned begin;  ///< Beginning number at center of spiral.
-   bool clockWise;  ///< True only if spiral should be drawn clockwise.
-   Dir initDir;     ///< Initial direction away from center along spiral.
+
+   /// Options for type of output.
+   enum OutputType {
+      ASCII,  ///< Output as an ASCII plot.
+      PPM,    ///< Output as a PPM image.
+      AUTO    ///< Output as ASCII for size < 20; otherwise as PPM.
+   };
+   
+   OutputType outputType;  ///< Type of output.
 
    /// Initialize configuration.
    /// \param ss  Width (pixels) of image containing spiral.
    /// \param bb  Beginning number at center of spiral.
-   /// \param cc  True only if sprial should be drawn clockwise.
-   /// \param dd  Initial direction away from center along spiral.
-   UlamConfig(unsigned ss, unsigned bb = 1, bool cc = false, Dir dd = RIGHT)
-      : size(ss), begin(bb), clockWise(cc), initDir(dd)
+   /// \param ot  Type of output.
+   UlamConfig(unsigned ss, unsigned bb = 1, OutputType ot = AUTO)
+      : size(ss), begin(bb), outputType(ot)
    {
    }
 };
