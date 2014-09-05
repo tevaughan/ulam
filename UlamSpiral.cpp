@@ -116,7 +116,6 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
             // composite
             for (unsigned ii = 0; ii < nfac; ++ii) sum += factors[ii];
             pixel.g(log(*factors.rbegin()));
-            pixel.b(-log(nfac));
          }
          break;
       case UlamConfig::AUTO:

@@ -66,3 +66,7 @@ for size=512.
 
 ![512x512UlamSpiral](example-output.png)
 
+Each red pixel is a prime. For every other pixel, the intensity of the green
+component of the pixel is proportional to the logarithm of the largest prime
+factor in the number corresponding to the pixel.
+

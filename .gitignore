@@ -2,3 +2,4 @@ ulam
 *.o
 tags
 .dep
+example-output.ppm

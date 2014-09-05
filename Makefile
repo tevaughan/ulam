@@ -43,17 +43,24 @@ PROGRAM  = ulam
 
 .PHONY : all clean dox
 
-all: tags
+all: tags example-output.png
 
 tags : $(PROGRAM)
 	ctags -R
 
 $(PROGRAM) : $(ALL_SRC:.cpp=.o)
 
+example-output.png: example-output.ppm
+	convert $< $@
+
+example-output.ppm: $(PROGRAM)
+	./$(PROGRAM) -s 512 > $@
+
 clean:
 	@rm -fv $(PROGRAM)
 	@rm -fv *.o
 	@rm -fv tags
+	@rm -fv example-output.ppm
 
 # --- See <http://mad-scientist.net/make/autodep.html>. ---
 # The following must be the last line.
