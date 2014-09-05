@@ -22,26 +22,20 @@
 /// Configuration for Ulam spiral.
 struct UlamConfig
 {
-   /// Options for initial direction away from center along spiral.
-   enum InitDir {
-      RIGHT,  ///< Spiral originates toward right from central point.
-      UP,     ///< Spiral originates upward       from central point.
-      LEFT,   ///< Spiral originates toward left  from central point.
-      DOWN    ///< Spiral originates downward     from central point.
-   };
+   /// Options for direction along spiral.
+   enum Dir { RIGHT, UP, LEFT, DOWN };
 
-   unsigned size;    ///< Width (pixels) of image containing spiral.
-   unsigned begin;   ///< Beginning number at center of spiral.
-   bool clockWise;   ///< True only if spiral should be drawn clockwise.
-   InitDir initDir;  ///< Initial direction away from center along spiral.
+   unsigned size;   ///< Width (pixels) of image containing spiral.
+   unsigned begin;  ///< Beginning number at center of spiral.
+   bool clockWise;  ///< True only if spiral should be drawn clockwise.
+   Dir initDir;     ///< Initial direction away from center along spiral.
 
    /// Initialize configuration.
    /// \param ss  Width (pixels) of image containing spiral.
    /// \param bb  Beginning number at center of spiral.
    /// \param cc  True only if sprial should be drawn clockwise.
    /// \param dd  Initial direction away from center along spiral.
-   UlamConfig(unsigned ss, unsigned bb = 1, bool cc = false,
-              InitDir dd = RIGHT)
+   UlamConfig(unsigned ss, unsigned bb = 1, bool cc = false, Dir dd = RIGHT)
       : size(ss), begin(bb), clockWise(cc), initDir(dd)
    {
    }

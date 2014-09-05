@@ -46,7 +46,7 @@ CommandLine::CommandLine(int argc, char** argv)
    : invoc(argv[0]), ulamConfig(0)
 {
    int opt;
-   UlamConfig::InitDir& initDir = ulamConfig.initDir;
+   UlamConfig::Dir& initDir = ulamConfig.initDir;
    while ((opt = getopt(argc, argv, "b:cdls:u")) != -1) {
       switch (opt) {
       case 'b':

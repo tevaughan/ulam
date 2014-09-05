@@ -93,6 +93,12 @@ public:
    {
       return mData[cc + (mHeight - 1 - rr)*mWidth];
    }
+
+   /// Scale each color component so that the minimum is 0, and the maximum is
+   /// 255.
+   void normalize();
+
+   void writePpm();  ///< Write PPM file to standard output.
 };
 
 #endif  // ndef IMAGE_HPP
