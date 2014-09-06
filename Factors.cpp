@@ -18,6 +18,15 @@
 
 #include "Factors.hpp"
 
+using namespace std;
+
+ostream& operator<<(ostream& os, Factor const& ff)
+{
+   os << ff.prime;
+   if (ff.exponent > 1) os << "^" << ff.exponent;
+   return os;
+}
+
 Factors Factors::operator*(Factors const& f2) const
 {
    Factors f3;  // Return value.
@@ -28,14 +37,14 @@ Factors Factors::operator*(Factors const& f2) const
    // Combine prime factors into new list; preserve sorting.
    while (!done) {
       int cc = 0;  // case number
-      unsigned p1, p2;
+      Factor t1, t2;
       if (off1 < f1.size()) {
          cc += 1;
-         p1 = f1[off1];
+         t1 = f1[off1];
       }
       if (off2 < f2.size()) {
          cc += 2;
-         p2 = f2[off2];
+         t2 = f2[off2];
       }
       // Push at most one more prime factor onto new list.
       switch (cc) {
@@ -43,20 +52,26 @@ Factors Factors::operator*(Factors const& f2) const
          done = true;  // no more prime factors in either list
          break;
       case 1:
-         f3.push_back(p1);
+         f3.push_back(t1);
          ++off1;
          break;
       case 2:
-         f3.push_back(p2);
+         f3.push_back(t2);
          ++off2;
          break;
       case 3:
-         // When a factor from each list be available, push the smaller.
-         if (p1 < p2) {
-            f3.push_back(p1);
+         // When a factor from each list be available, and when the prime base
+         // of one be smaller than that of the other, push the factor with the
+         // smaller base. Otherwise, when the bases be equal, push them both.
+         if (t1.prime < t2.prime) {
+            f3.push_back(t1);
             ++off1;
+         } else if (t1.prime > t2.prime) {
+            f3.push_back(t2);
+            ++off2;
          } else {
-            f3.push_back(p2);
+            f3.push_back(Factor(t1.prime, t1.exponent + t2.exponent));
+            ++off1;
             ++off2;
          }
       }
@@ -64,10 +79,13 @@ Factors Factors::operator*(Factors const& f2) const
    return f3;
 }
 
-unsigned Factors::product() const
+ostream& operator<<(ostream& os, Factors const& ff)
 {
-   unsigned prod = 1;
-   for (unsigned ii = 0; ii < size(); ++ii) prod *= (*this)[ii];
-   return prod;
+   if (ff.size() == 0) return os << 1;
+   for (unsigned ii = 0; ii < ff.size(); ++ii) {
+      if (ii > 0) os << "*";
+      os << ff[ii];
+   }
+   return os;
 }
 

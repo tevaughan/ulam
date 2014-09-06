@@ -43,7 +43,7 @@ PROGRAM  = ulam
 
 .PHONY : all clean dox
 
-all: tags example-output.png
+all: tags
 
 tags : $(PROGRAM)
 	ctags -R

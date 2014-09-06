@@ -80,7 +80,7 @@ void Natural::init(unsigned max)
    if (max == 1) return;
    vector< Multiple > primes;
    for (unsigned current = 2; current <= max; ++current) {
-      vector<unsigned>& factors = mFactors[current - 1];
+      vector<Factor>& factors = mFactors[current - 1];
       if (factors.size() == 0) {
          // The current number is prime because its factorization is null.
          primes.push_back(current);

@@ -89,25 +89,19 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
    while (col < size && row < size) {
       Factors const factors = Natural(num).factors();
       unsigned const nfac = factors.size();
+      bool const isPrime = (nfac == 1 && factors[0].exponent == 1);
       Pixel& pixel = mImage(col, row);
-      float sum = 0.0f;  // Initialize sum of factors.
       switch (mConfig.outputType) {
       case UlamConfig::ASCII:
-         pixel.r(nfac == 1 ? '@' : '-');
+         pixel.r(isPrime ? '@' : '-');
          break;
       case UlamConfig::PPM:
-         switch (nfac) {
-         case 0:
-            // 1
-            break;
-         case 1:
-            // prime
-            pixel.r(1);
-            break;
-         default:
-            // composite
-            for (unsigned ii = 0; ii < nfac; ++ii) sum += factors[ii];
-            pixel.g(log(*factors.rbegin()));
+         if (nfac) {
+            if (isPrime) {
+               pixel.r(1);
+            } else {
+               pixel.g(log(factors.rbegin()->prime));
+            }
          }
          break;
       case UlamConfig::AUTO:
