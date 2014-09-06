@@ -30,6 +30,16 @@ class UlamSpiral
    UlamConfig mConfig;  ///< Configuration for spiral.
    Image mImage;        ///< Image of spiral.
 
+   /// Convert linear position on Ulam spiral to rectangular coordinates. Take
+   /// the Linear Position 1 to Rectangular Coordinate (0,0).
+   ///
+   /// \param[in]  lp  Linear position, such that 1 is the center of the
+   ///                 spiral.
+   ///
+   /// \param[out] col  Column offset from lower-left corner.
+   /// \param[out] row  Row offset from lower-left corner.
+   void convert(unsigned lp, unsigned& col, unsigned& row);
+
 public:
    /// Draw spiral into memory buffer.
    /// \param config  Configuration for spiral.

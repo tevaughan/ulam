@@ -25,23 +25,18 @@
 
 using namespace std;
 
-/// Convert linear position on Ulam spiral to rectangular coordinates. Take the
-/// Linear Position 1 to Rectangular Coordinate (0,0).
+/// Convert non-central linear position on Ulam spiral to rectangular
+/// coordinates.
 ///
-/// \param[in]  un  Linear position, such that 1 is the center of the spiral.
+/// \param[in]  lp  Linear position, such that 1 is the center of the spiral.
+///                 For convertPositive(), lp must be at least 2.
+///
 /// \param[out] xx  X coordinate.
 /// \param[out] yy  Y coordinate.
-void convert(unsigned un, int& xx, int& yy)
+void convertPositive(unsigned lp, int& xx, int& yy)
 {
-   // Code below takes un=0 -> (xx,yy)=(0,0), but smallest input will be un=1.
-   // So decrement un before beginning.
-   --un;
-   if (un == 0) {
-      xx = yy = 0;
-      return;
-   }
-   int const mm = int(0.5 * (sqrt(un) + 1.0));
-   int const kk = un - 4 * mm * (mm - 1);
+   int const mm = int(0.5 * (sqrt(lp) + 1.0));
+   int const kk = lp - 4 * mm * (mm - 1);
    if (kk < 1 || kk > 8 * mm) {
       cerr << "convert: ERROR: unexpected kk=" << kk << endl;
       exit(-1);
@@ -60,6 +55,25 @@ void convert(unsigned un, int& xx, int& yy)
    }
 }
 
+void UlamSpiral::convert(unsigned lp, unsigned& col, unsigned& row)
+{
+   // convertPositive() implements a model in which lp=0 corresponds to the
+   // center of the spiral. The caller of the present function implements the
+   // model in which lp=1 corresponds to the center of the spiral.  So
+   // decrement the local copy of lp before beginning.
+   --lp;
+   int xx, yy;
+   if (lp == 0) {
+      // This might for symmetry be implemented as a function, convertZero().
+      xx = yy = 0;
+   } else {
+      convertPositive(lp, xx, yy);
+   }
+   unsigned const center = (mConfig.size - 1) / 2;
+   col = center + xx;
+   row = center + yy;
+}
+
 UlamSpiral::UlamSpiral(UlamConfig const& config)
    : mConfig(config), mImage(config.size, config.size)
 {
@@ -70,10 +84,8 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
    Natural::init(numNats);
    cerr << " done!" << endl;
    unsigned num = mConfig.begin;
-   int xx, yy;
-   convert(num - mConfig.begin + 1, xx, yy);
-   unsigned col = size / 2 + xx;
-   unsigned row = size / 2 + yy;
+   unsigned col, row;
+   convert(num - mConfig.begin + 1, col, row);
    while (col < size && row < size) {
       Factors const factors = Natural(num).factors();
       unsigned const nfac = factors.size();
@@ -104,9 +116,7 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
       }
       // Advance to next number, and convert it to column and row coordinates.
       ++num;
-      convert(num - mConfig.begin + 1, xx, yy);
-      col = size / 2 + xx;
-      row = size / 2 + yy;
+      convert(num - mConfig.begin + 1, col, row);
    }
 }
 
