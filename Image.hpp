@@ -73,6 +73,9 @@ public:
       if (mData) delete[] mData;
    }
 
+   unsigned width() const { return mWidth; }
+   unsigned height() const { return mHeight; }
+
    /// Select a pixel by column and row such that (col,row) = (0,0) is at the
    /// lower-left corner of the window.
    ///
@@ -97,6 +100,8 @@ public:
 
    /// Scale each color component so that the minimum for the component is 0,
    /// and the maximum for the component is 255.
+   void normalizePerChannel();
+
    void normalize();
 
    void writePpm();  ///< Write PPM file to standard output.
@@ -108,6 +113,26 @@ public:
    /// \param channel  Color channel to print. Red is Channel 0; green,
    ///                 Channel 1; and blue, Channel 2.
    void writeAscii(int channel) const;
+};
+
+struct MinMaxPerChannel
+{
+   float minR;
+   float minG;
+   float minB;
+   float maxR;
+   float maxG;
+   float maxB;
+
+   MinMaxPerChannel(Image const& img);
+};
+
+struct MinMaxPerPixel
+{
+   float min;
+   float max;
+
+   MinMaxPerPixel(Image const& img);
 };
 
 #endif  // ndef IMAGE_HPP

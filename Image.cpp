@@ -33,37 +33,41 @@ Image::Image(unsigned ww, unsigned hh)
    }
 }
 
-void Image::normalize()
+void Image::normalizePerChannel()
 {
+   MinMaxPerChannel const minMax(*this);
+   float const denR = minMax.maxR - minMax.minR;
+   float const denG = minMax.maxG - minMax.minG;
+   float const denB = minMax.maxB - minMax.minB;
+   float const cR = (denR < FLT_MIN ? 255.0f : 255.0f / denR);
+   float const cG = (denG < FLT_MIN ? 255.0f : 255.0f / denG);
+   float const cB = (denB < FLT_MIN ? 255.0f : 255.0f / denB);
    unsigned const numPix = mWidth * mHeight;
-   float maxR = -FLT_MAX, maxG = -FLT_MAX, maxB = -FLT_MAX;
-   float minR = +FLT_MAX, minG = +FLT_MAX, minB = +FLT_MAX;
-   for (unsigned ii = 0; ii < numPix; ++ii) {
-      Pixel const& pixel = mData[ii];
-      float const rr = pixel.r();
-      float const gg = pixel.g();
-      float const bb = pixel.b();
-      if (rr > maxR) maxR = rr;
-      if (gg > maxG) maxG = gg;
-      if (bb > maxB) maxB = bb;
-      if (rr < minR) minR = rr;
-      if (gg < minG) minG = gg;
-      if (bb < minB) minB = bb;
-   }
-   float denR = maxR - minR;
-   float denG = maxG - minG;
-   float denB = maxB - minB;
-   if (denR < FLT_MIN) denR = 1.0f;
-   if (denG < FLT_MIN) denG = 1.0f;
-   if (denB < FLT_MIN) denB = 1.0f;
    for (unsigned ii = 0; ii < numPix; ++ii) {
       Pixel& pixel = mData[ii];
       float const rr = pixel.r();
       float const gg = pixel.g();
       float const bb = pixel.b();
-      pixel.r((rr - minR)*255.0/denR);
-      pixel.g((gg - minG)*255.0/denG);
-      pixel.b((bb - minB)*255.0/denB);
+      pixel.r((rr - minMax.minR) * cR);
+      pixel.g((gg - minMax.minG) * cG);
+      pixel.b((bb - minMax.minB) * cB);
+   }
+}
+
+void Image::normalize()
+{
+   MinMaxPerPixel const minMax(*this);
+   float const den = minMax.max - minMax.min;
+   float const cc = (den < FLT_MIN ? 255.0f : 255.0f / den);
+   unsigned const numPix = mWidth * mHeight;
+   for (unsigned ii = 0; ii < numPix; ++ii) {
+      Pixel& pixel = mData[ii];
+      float const rr = pixel.r();
+      float const gg = pixel.g();
+      float const bb = pixel.b();
+      pixel.r((rr - minMax.min) * cc);
+      pixel.g((gg - minMax.min) * cc);
+      pixel.b((bb - minMax.min) * cc);
    }
 }
 
@@ -93,5 +97,65 @@ void Image::writeAscii(int chan) const
       }
       cout << "\n";
    }
+}
+
+MinMaxPerChannel::MinMaxPerChannel(Image const& img)
+   : minR(+FLT_MAX)
+   , minG(+FLT_MAX)
+   , minB(+FLT_MAX)
+   , maxR(-FLT_MAX)
+   , maxG(-FLT_MAX)
+   , maxB(-FLT_MAX)
+{
+   for (unsigned ir = 0; ir < img.height(); ++ir) {
+      for (unsigned ic = 0; ic < img.width(); ++ic) {
+         Pixel const& pixel = img(ic, ir);
+         float const rr = pixel.r();
+         float const gg = pixel.g();
+         float const bb = pixel.b();
+         if (rr > maxR) maxR = rr;
+         if (gg > maxG) maxG = gg;
+         if (bb > maxB) maxB = bb;
+         if (rr < minR) minR = rr;
+         if (gg < minG) minG = gg;
+         if (bb < minB) minB = bb;
+      }
+   }
+}
+
+MinMaxPerPixel::MinMaxPerPixel(Image const& img) : min(+FLT_MAX), max(-FLT_MAX)
+{
+#define COLOR_DEBUG 1
+#if COLOR_DEBUG
+   float minR, minG, minB, maxR, maxG, maxB;
+   minR = minG = minB = +FLT_MAX;
+   maxR = maxG = maxB = -FLT_MAX;
+#endif
+   for (unsigned ir = 0; ir < img.height(); ++ir) {
+      for (unsigned ic = 0; ic < img.width(); ++ic) {
+         Pixel const& pixel = img(ic, ir);
+         float const rr = pixel.r();
+         float const gg = pixel.g();
+         float const bb = pixel.b();
+         if (rr > max) max = rr;
+         if (gg > max) max = gg;
+         if (bb > max) max = bb;
+         if (rr < min) min = rr;
+         if (gg < min) min = gg;
+         if (bb < min) min = bb;
+#if COLOR_DEBUG
+         if (rr > maxR) maxR = rr;
+         if (gg > maxG) maxG = gg;
+         if (bb > maxB) maxB = bb;
+         if (rr < minR) minR = rr;
+         if (gg < minG) minG = gg;
+         if (bb < minB) minB = bb;
+#endif
+      }
+   }
+#if COLOR_DEBUG
+   cerr << "minR=" << minR << " minG=" << minG << " minB=" << minB << endl;
+   cerr << "maxR=" << maxR << " maxG=" << maxG << " maxB=" << maxB << endl;
+#endif
 }
 

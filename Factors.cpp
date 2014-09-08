@@ -79,6 +79,23 @@ Factors Factors::operator*(Factors const& f2) const
    return f3;
 }
 
+unsigned Factors::maxExp() const
+{
+   unsigned max = 0;
+   for (auto it = begin(); it != end(); ++it) {
+      unsigned const ee = it->exponent;
+      if (ee > max) max = ee;
+   }
+   return max;
+}
+
+unsigned Factors::sumExp() const
+{
+   unsigned sum = 0;
+   for (auto it = begin(); it != end(); ++it) sum += it->exponent;
+   return sum;
+}
+
 ostream& operator<<(ostream& os, Factors const& ff)
 {
    if (ff.size() == 0) return os << 1;

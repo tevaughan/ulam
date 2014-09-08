@@ -88,20 +88,29 @@ UlamSpiral::UlamSpiral(UlamConfig const& config)
    convert(num - mConfig.begin + 1, col, row);
    while (col < size && row < size) {
       Factors const factors = Natural(num).factors();
-      unsigned const nfac = factors.size();
-      bool const isPrime = (nfac == 1 && factors[0].exponent == 1);
+      unsigned nfac = factors.size();
+      unsigned sumExp = factors.sumExp();
+      float maxPrimeFrac = 0;
+      if (nfac > 0) maxPrimeFrac = factors.rbegin()->prime * 1.0 / num;
+      bool const isPrime = (nfac == 1 && sumExp == 1);
       Pixel& pixel = mImage(col, row);
       switch (mConfig.outputType) {
       case UlamConfig::ASCII:
          pixel.r(isPrime ? '@' : '-');
          break;
       case UlamConfig::PPM:
-         if (nfac) {
-            if (isPrime) {
-               pixel.r(1);
-            } else {
-               pixel.g(log(factors.rbegin()->prime));
-            }
+         if (num == 1) {
+            pixel.r(2.9f);
+            pixel.g(2.9f);
+            pixel.b(2.9f);
+         } else if (isPrime) {
+            pixel.r(-1.0f);
+            pixel.g(-1.0f);
+            pixel.b(-1.0f);
+         } else {
+            pixel.r(0.215 * sumExp);
+            pixel.g(0.024 * pow(nfac, 3.0));
+            pixel.b(0.082 * pow(maxPrimeFrac,-0.4));
          }
          break;
       case UlamConfig::AUTO:

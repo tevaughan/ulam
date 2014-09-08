@@ -55,6 +55,9 @@ struct Factors : public std::vector< Factor >
    /// \param fB  Factors of a number B.
    /// \return    Factors of A*B, where A corresponds to the present instance.
    Factors operator*(Factors const& fB) const;
+
+   unsigned maxExp() const;  ///< Maximum exponent in factorization.
+   unsigned sumExp() const;  ///< Number of atomic prime factors.
 };
 
 /// Print an instance of Factors on an output stream.
