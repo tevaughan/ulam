@@ -73,7 +73,7 @@ void Image::normalize()
 
 void Image::writePpm()
 {
-   normalize();
+   normalizePerChannel();
    cout << "P6\n" << mWidth << " " << mHeight << "\n255\n";
    unsigned const numPix = mWidth * mHeight;
    for (unsigned ii = 0; ii < numPix; ++ii) {
