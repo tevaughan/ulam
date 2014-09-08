@@ -89,7 +89,8 @@ for size=150.
 
 ![150x150UlamSpiral](example-output.png)
 
-Each black pixel is a prime. For every other pixel,
+The white pixel at the center is the Number 1. Each black pixel is a prime. For
+every other pixel,
  * the intensity of the red component is proportional to the number of atomic
    prime factors (to the sum of the exponents in the prime factorization);
  * the intensity of the green component is proportional to the cube of the
