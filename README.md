@@ -85,11 +85,24 @@ represents a prime. The following example is for size=23.
     - - @ - - - - - - - - - - - @ - @ - - - - - -
 
 For sizes above 23, the default output is a PPM image. The following example is
-for size=512.
+for size=150.
 
-![512x512UlamSpiral](example-output.png)
+![150x150UlamSpiral](example-output.png)
 
-Each red pixel is a prime. For every other pixel, the intensity of the green
-component of the pixel is proportional to the logarithm of the largest prime
-factor in the number corresponding to the pixel.
+Each black pixel is a prime. For every other pixel,
+ * the intensity of the red component is proportional to the number of atomic
+   prime factors (to the sum of the exponents in the prime factorization);
+ * the intensity of the green component is proportional to the cube of the
+   number of distinct primes in the factorization; and
+ * the intensity of the blue component is proportional the -0.4 power of the
+   ratio of the largest prime in the factorization to the number being
+   factored.
+
+The brighter the pixel, less the prime in each of several senses. The greater
+the red component, the more composite the number in the sense of having a large
+number of factors, even if there be repeated factors. The greater the green
+component, the more composite the number in the sense of having a larger number
+of distinct primes in the factorization. The larger the blue component, the
+more composite the number in that the largest of the prime factors is a smaller
+fraction of the factored number.
 
