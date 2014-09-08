@@ -106,3 +106,10 @@ of distinct primes in the factorization. The larger the blue component, the
 more composite the number in that the largest of the prime factors is a smaller
 fraction of the factored number.
 
+What is interesting is that, horizontally, vertically, and diagonally, there
+are both bright and dark bands. Prime numbers seem never to occur inside a
+light band. Prime numbers seem heavily concentrated in dark bands. That is,
+where the numbers tend to be highly composite, prime numbers never occur. Also,
+where the numbers tend to be towards being "more prime", prime numbers
+frequently occur.
+
